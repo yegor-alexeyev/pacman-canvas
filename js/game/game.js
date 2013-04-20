@@ -1,7 +1,7 @@
-define(["game/sound","lib/jquery"],function(Sound,$) {
+define(["game/Sound","actors/Ghost","game/Score","jquery"],function(Sound,Ghost,Score,$) {
 
     // Manages the whole game ("God Object")
-    function Game(mapConfig) {
+    function Game(mapConfig,pacman) {
         this.running = true;
         this.pause = false;
         this.score = new Score();
@@ -14,6 +14,12 @@ define(["game/sound","lib/jquery"],function(Sound,$) {
         this.canvas = $("#myCanvas").get(0);
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        
+        this.pacman = pacman;
+        this.pinky;
+        this.blinky;
+        this.inky;
+        this.clyde;
     };
     
     // Functions
@@ -27,10 +33,14 @@ define(["game/sound","lib/jquery"],function(Sound,$) {
 		this.level++;
 		this.init(1);
 	};
-	Game.prototype.init = function (state) {
-		console.log("init game");
-		
-		// get Level Map
+    Game.prototype.waitForAjax = function () {
+        while (this.map == "") {
+            console.log("Waiting for ajax callback");
+            setTimeout(this.waitForAjax,1000);
+        }
+    };
+    Game.prototype.getMap = function (callback) {
+    // get Level Map
 		$.ajax({
 			url: this.mapConfig,
 			async: false,
@@ -39,22 +49,32 @@ define(["game/sound","lib/jquery"],function(Sound,$) {
 			},
 			dataType: "json",
 			success: function (data) {
-				map = data; // something's fucking wrong here and it ain't my code
+                console.log("getMap success");
+                console.log("this.map1 ="+this.map);
+                console.log("data ="+data);
+                this.map = data; // something's fucking wrong here and it ain't my code
+                console.log("this.map2 ="+this.map);
+                
+                var temp = 0;
+                $.each(data.posY, function(i, item) {
+                   $.each(this.posX, function() { 
+                       if (this.type == "pill") {
+                        temp++;
+                        //console.log("Pill Count++. temp="+temp+". PillCount="+this.pillCount+".");
+                        }
+                    });
+                });
+                this.pillCount = temp;
+                return data;
 			}
 		});
-	
-		var temp = 0;
-		$.each(this.map.posY, function(i, item) {
-		   $.each(this.posX, function() { 
-			   if (this.type == "pill") {
-				temp++;
-				//console.log("Pill Count++. temp="+temp+". PillCount="+this.pillCount+".");
-				}
-			});
-		});
+    };
+	Game.prototype.init = function (state) {
+		console.log("init game");  
+        
+        this.getMap(function(data) { this.map = data; });
 		
-		this.pillCount = temp;
-		$(".lives").html("Lives: "+pacman.lives);	
+		$(".lives").html("Lives: "+this.pacman.lives);	
 		/*var text = "Insert Coin to Play!";
 		context.fillStyle = "#FFF";
 		context.font = "20px 'Press Start 2P'";
@@ -64,33 +84,33 @@ define(["game/sound","lib/jquery"],function(Sound,$) {
 		if (state == 0) {
 			this.score.set(0);
 			this.score.refresh(".score");
-			pacman.lives = 3;
+			this.pacman.lives = 3;
 			}
-		pacman.reset();
+		this.pacman.reset();
 		
 		// initalize Ghosts, avoid memory flooding
-		if (pinky == null) {
-			pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
-			inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
-			blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
-			clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
+		if (this.pinky == null) {
+			this.pinky = new Ghost(14*this.pacman.radius,10*this.pacman.radius,'img/pinky.svg',this);
+			this.inky = new Ghost(16*this.pacman.radius,10*this.pacman.radius,'img/inky.svg',this);
+			this.blinky = new Ghost(18*this.pacman.radius,10*this.pacman.radius,'img/blinky.svg',this);
+			this.clyde = new Ghost(20*this.pacman.radius,10*this.pacman.radius,'img/clyde.svg',this);
 		}
 		else {
 			//console.log("ghosts reset");
-			pinky.setPosition(14*pacman.radius,10*pacman.radius);
-			pinky.dazzle = false;
-			inky.setPosition(16*pacman.radius,10*pacman.radius);
-			inky.dazzle = false;
-			blinky.setPosition(18*pacman.radius,10*pacman.radius);
-			blinky.dazzle = false;
-			clyde.setPosition(20*pacman.radius,10*pacman.radius);
-			clyde.dazzle = false;
+			this.pinky.setPosition(14*this.pacman.radius,10*this.pacman.radius);
+			this.pinky.dazzle = false;
+			this.inky.setPosition(16*this.pacman.radius,10*this.pacman.radius);
+			this.inky.dazzle = false;
+			this.blinky.setPosition(18*this.pacman.radius,10*this.pacman.radius);
+			this.blinky.dazzle = false;
+			this.clyde.setPosition(20*this.pacman.radius,10*this.pacman.radius);
+			this.clyde.dazzle = false;
 		}
 	
 	};
 	Game.prototype.check = function() {
 	if ((this.pillCount == 0) && game.running) {
-			alert("Level "+game.level+" complete!\nScore: "+game.score.score+"\nRemaining Lives: "+pacman.lives+"\nClick OK to proceed to start the next level.");
+			alert("Level "+game.level+" complete!\nScore: "+game.score.score+"\nRemaining Lives: "+this.pacman.lives+"\nClick OK to proceed to start the next level.");
 			this.nextLevel();
 		}
 	};

@@ -17,9 +17,18 @@
 	
 --------------------------------------------------------------------*/
 
+
 // Start the main app logic.
-requirejs(['lib/jquery','actors/util/direction', 'actors/util/directionWatcher','actors/Figure', 'actors/pacman', 'actors/ghost', 'game/game', 'game/score', 'game/sound'],
-function   ( $, Direction, directionWatcher, Figure, Pacman, Ghost,Game, Score, Sound) {
+
+requirejs.config({
+    enforceDefine: true,
+    paths: {
+        jquery: 'http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min'
+    }
+});
+
+define(['jquery','actors/util/direction', 'actors/util/directionWatcher','actors/Figure', 'actors/Pacman', 'actors/Ghost', 'game/Game', 'game/Score', 'game/Sound'],
+function   ( $, Direction, directionWatcher, Figure, Pacman, Ghost, Game, Score, Sound) {
 
     //jQuery, canvas and the app/sub module are all
     //loaded and can be used here now.
@@ -35,6 +44,7 @@ var canvas;
 var context;
 var game;
 var inky, blinky, clyde, pinky;
+var pacman = new Pacman();
 
 var mapConfig = 'data/map.json';
 
@@ -54,7 +64,7 @@ function between (x, min, max) {
 	return x >= min && x <= max;
 	}
 
-game = new Game(mapConfig);
+game = new Game(mapConfig,pacman);
 	
 
 // Action starts here:

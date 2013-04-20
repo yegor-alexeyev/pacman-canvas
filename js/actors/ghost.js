@@ -1,7 +1,7 @@
-define(["actors/Figure","actors/util/directionWatcher"],function(Figure,directionWatcher) {
+define(["actors/Figure","actors/Game","actors/util/directionWatcher"],function(Figure,Game,directionWatcher) {
 
     // Ghost object in Constructor notation
-    function Ghost(posX, posY, image) {
+    function Ghost(posX, posY, image, game) {
         this.posX = posX;
         this.posY = posY;
         this.image = new Image();
@@ -10,7 +10,8 @@ define(["actors/Figure","actors/util/directionWatcher"],function(Figure,directio
         this.dazzleImg = new Image();
         this.dazzleImg.src = 'img/dazzled.svg';
         this.direction = right;
-        this.radius = pacman.radius;
+        this.radius = this.game.pacman.radius;
+        this.game = game;
         };
         
     // Functions
@@ -26,8 +27,8 @@ define(["actors/Figure","actors/util/directionWatcher"],function(Figure,directio
     };
     
     Ghost.prototype.reset = function() {
-        this.posX = 14*pacman.radius;
-        this.posY = 10*pacman.radius;
+        this.posX = 14*this.game.pacman.radius;
+        this.posY = 10*this.game.pacman.radius;
         this.dazzle = false;
     };
     
@@ -64,15 +65,15 @@ define(["actors/Figure","actors/util/directionWatcher"],function(Figure,directio
             this.stop=false;
         }
         /* Check Ghost / Pacman Collision			*/
-        if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
-            && (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
+        if ((between(this.game.pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
+            && (between(this.game.pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
         {
-            if (pacman.beastMode == false) {
-                pacman.die();
+            if (this.game.pacman.beastMode == false) {
+                this.game.pacman.die();
                 }
             else {
                 this.die();
-                game.score.add(100);
+                this.game.score.add(100);
                 }
         }
         

@@ -1,6 +1,6 @@
-define(["actors/Figure"],["actors/util/directionWatcher"],function(Figure,directionWatcher) {
+define(["actors/Figure","actors/util/directionWatcher"],function(Figure,directionWatcher) {
 
-function pacman() {
+function Pacman() {
 	this.radius = 15;
 	this.posX = 0;
 	this.posY = 6*2*this.radius;
@@ -16,17 +16,17 @@ function pacman() {
 	this.beastMode = false;
 	this.beastModeTimer = 0;
     this.directionWatcher = new directionWatcher();
-    
+    };
     
     // Functions
-	pacman.prototype.getCenterX = function () {
+	Pacman.prototype.getCenterX = function () {
 		return this.posX+this.radius;
 	};
-	pacman.prototype.getCenterY = function () {
+	Pacman.prototype.getCenterY = function () {
 		return this.posY+this.radius;
 	};
 
-	pacman.prototype.checkCollisions = function () {
+	Pacman.prototype.checkCollisions = function () {
 		
 		if ((this.stuckX == 0) && (this.stuckY == 0)) {				
 			
@@ -74,7 +74,7 @@ function pacman() {
 			if ((fieldAhead.type === "wall") || (fieldAhead.type === "door")) {
 				this.stuckX = this.dirX;
 				this.stuckY = this.dirY;
-				pacman.stop();
+				Pacman.stop();
 				// get out of the wall
 				if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 5;
 				if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 5;
@@ -86,7 +86,7 @@ function pacman() {
 	};
     
     
-	pacman.prototype.checkDirectionChange = function() {
+	Pacman.prototype.checkDirectionChange = function() {
 		if (this.directionWatcher.get() != null) {
 			//console.log("next Direction: "+directionWatcher.get().name);
 
@@ -107,14 +107,14 @@ function pacman() {
 			}
 		}
 	};
-	pacman.prototype.setDirection = function(dir) {			
+	Pacman.prototype.setDirection = function(dir) {			
 		this.dirX = dir.dirX;
 		this.dirY = dir.dirY;
 		this.angle1 = dir.angle1;
 		this.angle2 = dir.angle2;
 		this.direction = dir;
 	};
-	pacman.prototype.enableBeastMode = function() {
+	Pacman.prototype.enableBeastMode = function() {
 		this.beastMode = true;
 		this.beastModeTimer = 240;
 		console.log("Beast Mode activated!");
@@ -123,7 +123,7 @@ function pacman() {
 		blinky.dazzle = true;
 		clyde.dazzle = true;
 	};
-	pacman.prototype.disableBeastMode = function() { 
+	Pacman.prototype.disableBeastMode = function() { 
 		this.beastMode = false; 
 		console.log("Beast Mode is over!");
 		inky.dazzle = false;
@@ -131,7 +131,7 @@ function pacman() {
 		blinky.dazzle = false;
 		clyde.dazzle = false;
 		};
-	pacman.prototype.move = function() {
+	Pacman.prototype.move = function() {
 	
 		if (this.beastModeTimer > 0) {
 			this.beastModeTimer--;
@@ -149,7 +149,7 @@ function pacman() {
 		if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
 		};
 	
-	pacman.prototype.eat = function () {
+	Pacman.prototype.eat = function () {
 	
 		if (this.dirX == this.dirY == 0) {
 		
@@ -172,21 +172,21 @@ function pacman() {
 		}
 	};
 	
-	pacman.prototype.stop = function() {
+	Pacman.prototype.stop = function() {
 		this.dirX = 0;
 		this.dirY = 0;
 	};
-	pacman.prototype.reset = function() {
+	Pacman.prototype.reset = function() {
 		this.posX = 0;
 		this.posY = 6*2*this.radius;
 		this.setDirection(right);
 		this.stop();
 		this.stuckX = 0;
 		this.stuckY = 0;
-		console.log("reset pacman");
+		console.log("reset Pacman");
 	};
 	
-	pacman.prototype.die = function() {
+	Pacman.prototype.die = function() {
 		this.reset();
 		pinky.reset();
 		inky.reset();
@@ -200,14 +200,13 @@ function pacman() {
 		$(".lives").html("Lives: "+this.lives);	
 		Sound.play("die");
 		};
-	pacman.prototype.getGridPosX = function() {
+	Pacman.prototype.getGridPosX = function() {
 		return (this.posX - (this.posX % 30))/30;
 	};
-	pacman.prototype.getGridPosY = function() {
+	Pacman.prototype.getGridPosY = function() {
 		return (this.posY - (this.posY % 30))/30;
 	};
     
-    return pacman;
-};
+    return Pacman;
 
 });
