@@ -20,14 +20,19 @@
 
 // Start the main app logic.
 
-requirejs.config({
-    enforceDefine: true,
+/*requirejs.config({
+	enforceDefine: false,
+	shim: {
+		'jquery' : {
+			exports
+		}
+    
     paths: {
         jquery: 'http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min'
     }
-});
+});*/
 
-define(['jquery','actors/util/direction', 'actors/util/directionWatcher','actors/Figure', 'actors/Pacman', 'actors/Ghost', 'game/Game', 'game/Score', 'game/Sound'],
+require(['jquery','actors/util/direction', 'actors/util/directionWatcher','actors/Figure', 'actors/Pacman', 'actors/Ghost', 'game/Game', 'game/Score', 'game/Sound'],
 function   ( $, Direction, directionWatcher, Figure, Pacman, Ghost, Game, Score, Sound) {
 
     //jQuery, canvas and the app/sub module are all
