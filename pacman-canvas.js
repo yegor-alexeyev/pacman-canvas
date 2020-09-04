@@ -153,6 +153,16 @@ function geronimo() {
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 
+        this.pillImg = new Image();
+        this.pillImg.src = 'img/pill.gif';
+
+        this.powerPillImg = new Image();
+        this.powerPillImg.src = 'img/powerPill.gif';
+        this.eatenImg = new Image();
+        this.eatenImg.src = 'img/eaten.gif';
+        this.eatenRadius = 75;
+
+
 		this.pillSize = 15;
 		this.powerPillSize = 40;
 		this.powerpillSizeMin = 2;
@@ -1407,14 +1417,6 @@ function checkAppCache() {
 			context.fillStyle = "White";
 			context.strokeStyle = "White";
 			
-            game.pillImg = new Image();
-            game.pillImg.src = 'img/pill.gif';
-
-            game.powerPillImg = new Image();
-            game.powerPillImg.src = 'img/powerPill.gif';
-            game.eatenImg = new Image();
-            game.eatenImg.src = 'img/eaten.gif';
-            game.eatenRadius = pacman.radius*5;
 
 			var dotPosY;
 			$.each(game.map.posY, function(i, item) {
