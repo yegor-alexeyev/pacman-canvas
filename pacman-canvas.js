@@ -629,11 +629,11 @@ function geronimo() {
 			this.dazzled = false;
 		}
 		this.dazzleImg = new Image();
-		this.dazzleImg.src = 'img/dazzled.svg';
+		this.dazzleImg.src = 'img/dazzled.jpg';
 		this.dazzleImg2 = new Image();
 		this.dazzleImg2.src = 'img/dazzled2.svg';
 		this.deadImg = new Image();
-		this.deadImg.src = 'img/dead.svg';
+		this.deadImg.src = 'img/dead.jpg';
 		this.direction = right;
 		this.radius = pacman.radius;
 		this.draw = function (context) {					
