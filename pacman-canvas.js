@@ -400,10 +400,10 @@ function geronimo() {
 			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky === null || pinky === undefined) {
-				pinky = new Ghost("pinky",7,5,'img/pinky.jpg',2,2);
-				inky = new Ghost("inky",8,5,'img/inky.jpg',13,11);
-				blinky = new Ghost("blinky",9,5,'img/blinky.jpg',13,0);
-				clyde = new Ghost("clyde",10,5,'img/clyde.jpg',2,11);
+				pinky = new Ghost("pinky",7,5,'img/pinky.gif',2,2);
+				inky = new Ghost("inky",8,5,'img/inky.gif',13,11);
+				blinky = new Ghost("blinky",9,5,'img/blinky.gif',13,0);
+				clyde = new Ghost("clyde",10,5,'img/clyde.gif',2,11);
 			}
 			else {
 				//console.log("ghosts reset");
@@ -629,11 +629,11 @@ function geronimo() {
 			this.dazzled = false;
 		}
 		this.dazzleImg = new Image();
-		this.dazzleImg.src = 'img/dazzled.jpg';
+		this.dazzleImg.src = 'img/dazzled.gif';
 		this.dazzleImg2 = new Image();
-		this.dazzleImg2.src = 'img/dazzled2.jpg';
+		this.dazzleImg2.src = 'img/dazzled2.gif';
 		this.deadImg = new Image();
-		this.deadImg.src = 'img/dead.jpg';
+		this.deadImg.src = 'img/dead.gif';
 		this.direction = right;
 		this.radius = pacman.radius;
 		this.draw = function (context) {					
@@ -1408,12 +1408,12 @@ function checkAppCache() {
 			context.strokeStyle = "White";
 			
             game.pillImg = new Image();
-            game.pillImg.src = 'img/pill.jpg';
+            game.pillImg.src = 'img/pill.gif';
 
             game.powerPillImg = new Image();
-            game.powerPillImg.src = 'img/powerPill.jpg';
+            game.powerPillImg.src = 'img/powerPill.gif';
             game.eatenImg = new Image();
-            game.eatenImg.src = 'img/eaten.jpg';
+            game.eatenImg.src = 'img/eaten.gif';
             game.eatenRadius = pacman.radius*5;
 
 			var dotPosY;
