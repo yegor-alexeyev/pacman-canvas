@@ -1400,8 +1400,7 @@ function checkAppCache() {
 		
 		game.init(0);
 		logger.disableLogger();
-		
-		renderContent();
+		setTimeout(renderContent,150);
 		});
 		
 		function renderContent()
@@ -1441,12 +1440,13 @@ function checkAppCache() {
 			context.drawImage(canvas_walls, 0, 0);
 			
 			
+            // Ghosts
+            pinky.draw(context);
+            blinky.draw(context);
+            inky.draw(context);
+            clyde.draw(context);
+
 			if (game.running == true) {
-				// Ghosts
-				pinky.draw(context);
-				blinky.draw(context);
-				inky.draw(context);
-				clyde.draw(context);
 				
 				
 if (pacman.frozen) {
