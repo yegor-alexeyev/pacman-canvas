@@ -1167,8 +1167,8 @@ function geronimo() {
 			//console.log("reset pacman");
 		}
 		this.dieAnimation = function() {
-			this.angle1 += 0.01;
-			this.angle2 -= 0.01;
+			this.angle1 += 0.025;
+			this.angle2 -= 0.025;
 			if (this.angle1 >= this.direction.angle1+0.7 || this.angle2 <= this.direction.angle2-0.7) {
 				this.dieFinal();
 				}
