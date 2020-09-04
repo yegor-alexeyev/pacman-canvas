@@ -631,7 +631,7 @@ function geronimo() {
 		this.dazzleImg = new Image();
 		this.dazzleImg.src = 'img/dazzled.jpg';
 		this.dazzleImg2 = new Image();
-		this.dazzleImg2.src = 'img/dazzled2.svg';
+		this.dazzleImg2.src = 'img/dazzled2.jpg';
 		this.deadImg = new Image();
 		this.deadImg.src = 'img/dead.jpg';
 		this.direction = right;
