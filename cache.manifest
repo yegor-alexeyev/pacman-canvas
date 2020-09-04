@@ -27,10 +27,10 @@ js/jquery.hammer.min.js
 data/map.json
 
 # images
-img/blinky.svg
-img/clyde.svg
-img/inky.svg
-img/pinky.svg
+img/blinky.jpg
+img/clyde.jpg
+img/inky.jpg
+img/pinky.jpg
 img/dazzled.svg
 img/dazzled2.svg
 img/dead.svg

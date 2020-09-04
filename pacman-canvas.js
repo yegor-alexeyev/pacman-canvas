@@ -139,7 +139,7 @@ function geronimo() {
 		this.running = false;
 		this.pause = true;
 		this.score = new Score();
-		this.soundfx = 0;
+		this.soundfx = 1;
 		this.map;
 		this.pillCount;				// number of pills
 		this.monsters;
@@ -153,7 +153,8 @@ function geronimo() {
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 
-		this.pillSize = 3;
+		this.pillSize = 15;
+		this.powerPillSize = 50;
 		this.powerpillSizeMin = 2;
 		this.powerpillSizeMax = 6;
 		this.powerpillSizeCurrent = this.powerpillSizeMax;
@@ -332,6 +333,7 @@ function geronimo() {
 				this.running = true;
 				this.closeMessage();
 				animationLoop();
+                Sound.play("theme");
 			}
 			else if (this.pause) {
 				// stop timer
@@ -398,10 +400,10 @@ function geronimo() {
 			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky === null || pinky === undefined) {
-				pinky = new Ghost("pinky",7,5,'img/pinky.svg',2,2);
-				inky = new Ghost("inky",8,5,'img/inky.svg',13,11);
-				blinky = new Ghost("blinky",9,5,'img/blinky.svg',13,0);
-				clyde = new Ghost("clyde",10,5,'img/clyde.svg',2,11);
+				pinky = new Ghost("pinky",7,5,'img/pinky.jpg',2,2);
+				inky = new Ghost("inky",8,5,'img/inky.jpg',13,11);
+				blinky = new Ghost("blinky",9,5,'img/blinky.jpg',13,0);
+				clyde = new Ghost("clyde",10,5,'img/clyde.jpg',2,11);
 			}
 			else {
 				//console.log("ghosts reset");
@@ -1165,8 +1167,8 @@ function geronimo() {
 			//console.log("reset pacman");
 		}
 		this.dieAnimation = function() {
-			this.angle1 += 0.05;
-			this.angle2 -= 0.05;
+			this.angle1 += 0.01;
+			this.angle2 -= 0.01;
 			if (this.angle1 >= this.direction.angle1+0.7 || this.angle2 <= this.direction.angle2-0.7) {
 				this.dieFinal();
 				}
@@ -1174,6 +1176,8 @@ function geronimo() {
 		this.die = function() {
 			Sound.play("die");
 			this.freeze();
+			this.angle1 = this.direction.angle1 - 0.25;
+			this.angle2 = this.direction.angle2 + 0.25;
 			this.dieAnimation();
 			}
 		this.dieFinal = function() {
@@ -1398,20 +1402,32 @@ function checkAppCache() {
 			game.score.refresh(".score");
 						
 			// Pills
+            context.translate(0.5, 0.5);
 			context.beginPath();
 			context.fillStyle = "White";
 			context.strokeStyle = "White";
 			
+            game.pillImg = new Image();
+            game.pillImg.src = 'img/pill.jpg';
+
+            game.powerPillImg = new Image();
+            game.powerPillImg.src = 'img/powerPill.jpg';
+            game.eatenImg = new Image();
+            game.eatenImg.src = 'img/eaten.jpg';
+            game.eatenRadius = pacman.radius*5;
+
 			var dotPosY;
 			$.each(game.map.posY, function(i, item) {
 				dotPosY = this.row;
 			   $.each(this.posX, function() { 
 				   if (this.type == "pill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.pillSize,0*Math.PI,2*Math.PI);
+                    context.drawImage(game.pillImg, game.toPixelPos(this.col-1) + pacman.radius - game.pillSize/2, game.toPixelPos(dotPosY-1) + pacman.radius - game.pillSize/2, game.pillSize, game.pillSize);
+					// context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.pillSize,0*Math.PI,2*Math.PI);
 					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
 				   }
 				   else if (this.type == "powerpill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.powerpillSizeCurrent,0*Math.PI,2*Math.PI);
+                    context.drawImage(game.powerPillImg, game.toPixelPos(this.col-1) + pacman.radius - game.powerPillSize/2 - 0.5, game.toPixelPos(dotPosY-1) + pacman.radius - game.powerPillSize/2 - 0.5, game.powerPillSize, game.powerPillSize);
+					// context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.powerpillSizeCurrent,0*Math.PI,2*Math.PI);
 					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
 				   }
 			   }); 
@@ -1431,14 +1447,32 @@ function checkAppCache() {
 				clyde.draw(context);
 				
 				
+if (pacman.frozen) {
 				// Pac Man
 				context.beginPath();
 				context.fillStyle = "Yellow";
 				context.strokeStyle = "Yellow";
-				context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
+                context.save();
+// context.beginPath();
+				context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,game.eatenRadius/2*Math.sqrt(2),pacman.angle1*Math.PI,pacman.angle2*Math.PI);
 				context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
-				context.stroke();
-				context.fill();
+// context.closePath();
+                context.clip();
+				context.drawImage(game.eatenImg, pacman.posX + pacman.radius/2 - game.eatenRadius/2, pacman.posY + pacman.radius/2 - game.eatenRadius/2, game.eatenRadius, game.eatenRadius);
+                context.restore();
+				// context.stroke();
+				// context.fill();
+} else {
+                // Pac Man
+                context.beginPath();
+                context.fillStyle = "Yellow";
+                context.strokeStyle = "Yellow";
+                context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
+                context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
+                context.stroke();
+                context.fill();
+
+}
 			}
 			
 		}
