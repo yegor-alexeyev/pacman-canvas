@@ -154,7 +154,7 @@ function geronimo() {
 		this.height = this.canvas.height;
 
 		this.pillSize = 15;
-		this.powerPillSize = 50;
+		this.powerPillSize = 40;
 		this.powerpillSizeMin = 2;
 		this.powerpillSizeMax = 6;
 		this.powerpillSizeCurrent = this.powerpillSizeMax;
