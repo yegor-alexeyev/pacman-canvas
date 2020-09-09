@@ -157,7 +157,7 @@ function geronimo() {
         this.pillImg.src = 'img/pill.gif';
 
         this.powerPillImg = new Image();
-        this.powerPillImg.src = 'img/powerPill.gif';
+        this.powerPillImg.src = 'img/powerPill.png';
         this.eatenImg = new Image();
         this.eatenImg.src = 'img/eaten.gif';
         this.eatenRadius = 75;
